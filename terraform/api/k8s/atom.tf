@@ -12,7 +12,7 @@ resource "kubernetes_cluster_role" "atom" {
 
 resource "kubernetes_cluster_role_binding" "atom" {
   metadata {
-    name = "atom"
+    name = "atom-${var.name}"
   }
 
   role_ref {
@@ -23,7 +23,7 @@ resource "kubernetes_cluster_role_binding" "atom" {
 
   subject {
     kind      = "ServiceAccount"
-    name      = "atom"
+    name      = "atom-${var.name}"
     namespace = var.namespace
   }
 }
@@ -31,7 +31,7 @@ resource "kubernetes_cluster_role_binding" "atom" {
 resource "kubernetes_service_account" "atom" {
   metadata {
     namespace = var.namespace
-    name      = "atom"
+    name      = "atom-${var.name}"
   }
 }
 
@@ -90,8 +90,7 @@ resource "kubernetes_deployment" "atom" {
       spec {
         automount_service_account_token = true
         share_process_namespace         = true
-        service_account_name            = "atom"
-        priority_class_name             = "system-cluster-critical"
+        service_account_name            = kubernetes_service_account.atom.metadata.0.name
 
         container {
           name              = "system"
