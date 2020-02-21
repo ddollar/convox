@@ -42,7 +42,7 @@ module "k8s" {
   release   = var.release
 
   annotations = {
-    "cert-manager.io/cluster-issuer" = "letsencrypt"
+    "cert-manager.io/cluster-issuer" = "letsencrypt-http"
     "kubernetes.io/ingress.class"    = "nginx"
   }
 
