@@ -139,6 +139,7 @@ resource "kubernetes_deployment" "metrics" {
         priority_class_name             = "system-cluster-critical"
 
         container {
+          args              = var.args
           name              = "metrics-server"
           image             = "k8s.gcr.io/metrics-server-amd64:v0.3.6"
           image_pull_policy = "Always"
