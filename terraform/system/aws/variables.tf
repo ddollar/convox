@@ -30,6 +30,10 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "spot_types" {
+  default = ""
+}
+
 variable "syslog" {
   default = ""
 }

@@ -36,6 +36,7 @@ module "cluster" {
   node_disk          = var.node_disk
   node_type          = var.node_type
   private            = var.private
+  spot_types         = var.spot_types
 }
 
 module "fluentd" {

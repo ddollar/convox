@@ -25,3 +25,7 @@ variable "node_type" {
 variable "private" {
   default = true
 }
+
+variable "spot_types" {
+  default = ""
+}
