@@ -15,7 +15,7 @@ import (
 	shellquote "github.com/kballard/go-shellquote"
 )
 
-func (bb *Build) build(path, dockerfile string, tag string, env map[string]string) error {
+func (bb *Build) build(path, dockerfile string, tag string, env map[string]string, caches map[string]bool) error {
 	if path == "" {
 		return fmt.Errorf("must have path to build")
 	}
@@ -26,6 +26,10 @@ func (bb *Build) build(path, dockerfile string, tag string, env map[string]strin
 
 	if !bb.Cache {
 		args = append(args, "--no-cache")
+	}
+
+	for cache := range caches {
+		args = append(args, "--cache-from", cache)
 	}
 
 	args = append(args, "-t", tag)

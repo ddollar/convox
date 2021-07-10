@@ -58,6 +58,20 @@ func (p *Provider) BuildCreate(app, url string, opts structs.BuildCreateOptions)
 		"RACK_URL":          fmt.Sprintf("https://convox:%s@api.%s.svc.cluster.local:5443", p.Password, p.Namespace),
 	}
 
+	a, err := p.AppGet(app)
+	if err != nil {
+		return nil, err
+	}
+
+	if a.Release != "" {
+		r, err := p.ReleaseGet(a.Name, a.Release)
+		if err != nil {
+			return nil, err
+		}
+
+		env["BUILD_CURRENT"] = r.Build
+	}
+
 	repo, _, err := p.Engine.RepositoryHost(app)
 	if err != nil {
 		return nil, errors.WithStack(err)

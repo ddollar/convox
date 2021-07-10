@@ -28,6 +28,7 @@ type Options struct {
 	App         string
 	Auth        string
 	Cache       bool
+	Current     string
 	Development bool
 	EnvWrapper  bool
 	Generation  string
@@ -217,11 +218,16 @@ func (bb *Build) buildGeneration2(dir string) error {
 	prefix := fmt.Sprintf("%s/%s", bb.Rack, bb.App)
 
 	builds := map[string]manifest.ServiceBuild{}
+	caches := map[string]bool{}
 	pulls := map[string]bool{}
 	pushes := map[string]string{}
 	tags := map[string][]string{}
 
 	for _, s := range m.Services {
+		if bb.Cache && bb.Push != "" && bb.Current != "" {
+			caches[fmt.Sprintf("%s:%s.%s", bb.Push, s.Name, bb.Current)] = true
+		}
+
 		hash := s.BuildHash(bb.Id)
 		to := fmt.Sprintf("%s:%s.%s", prefix, s.Name, bb.Id)
 
@@ -238,15 +244,23 @@ func (bb *Build) buildGeneration2(dir string) error {
 		}
 	}
 
+	for image := range caches {
+		if err := bb.pull(image); err != nil {
+			fmt.Printf("err: %+v\n", err) // log to rack logs but dont fail the build
+		}
+	}
+
 	for hash, b := range builds {
 		bb.Printf("Building: %s\n", b.Path)
 
-		if err := bb.build(filepath.Join(dir, b.Path), b.Manifest, hash, env); err != nil {
+		if err := bb.build(filepath.Join(dir, b.Path), b.Manifest, hash, env, caches); err != nil {
 			return err
 		}
 	}
 
 	for image := range pulls {
+		bb.Printf("Pulling: %s\n", image)
+
 		if err := bb.pull(image); err != nil {
 			return err
 		}
