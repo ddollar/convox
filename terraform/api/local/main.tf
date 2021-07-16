@@ -18,6 +18,7 @@ module "k8s" {
   rack           = var.name
   release        = var.release
   replicas       = 1
+  resolver       = var.resolver
 
   annotations = {
     "cert-manager.io/cluster-issuer" = "self-signed"
