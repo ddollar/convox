@@ -4,7 +4,7 @@ FROM golang:1.16 AS development
 
 RUN apt-get update && apt-get -y install default-mysql-client postgresql-client redis-tools telnet
 
-RUN curl -s https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | \
+RUN curl -s https://download.docker.com/linux/static/stable/x86_64/docker-20.10.7.tgz | \
   tar -C /usr/bin --strip-components 1 -xz
 
 RUN curl -Ls https://storage.googleapis.com/kubernetes-release/release/v1.17.3/bin/linux/amd64/kubectl -o /usr/bin/kubectl && \
@@ -44,7 +44,7 @@ FROM ubuntu:20.04
 
 RUN apt-get -qq update && apt-get -qq -y install curl default-mysql-client postgresql-client redis-tools telnet
 
-RUN curl -s https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | \
+RUN curl -s https://download.docker.com/linux/static/stable/x86_64/docker-20.10.7.tgz | \
   tar -C /usr/bin --strip-components 1 -xz
 
 RUN curl -Ls https://storage.googleapis.com/kubernetes-release/release/v1.17.2/bin/linux/amd64/kubectl -o /usr/bin/kubectl && \
@@ -59,6 +59,7 @@ WORKDIR /app
 COPY --from=package /go/bin/api      $GOPATH/bin/
 COPY --from=package /go/bin/atom     $GOPATH/bin/
 COPY --from=package /go/bin/build    $GOPATH/bin/
+COPY --from=package /go/bin/convox   $GOPATH/bin/
 COPY --from=package /go/bin/docs     $GOPATH/bin/
 COPY --from=package /go/bin/resolver $GOPATH/bin/
 
