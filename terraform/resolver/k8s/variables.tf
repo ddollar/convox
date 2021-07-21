@@ -1,5 +1,5 @@
 variable "annotations" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 
@@ -9,7 +9,7 @@ variable "docker_hub_authentication" {
 }
 
 variable "env" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 
@@ -32,8 +32,3 @@ variable "release" {
 variable "replicas" {
   default = 2
 }
-
-variable "set_priority_class" {
-  default = true
-}
-
