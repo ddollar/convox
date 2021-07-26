@@ -112,17 +112,11 @@ github.com/aws/aws-sdk-go/private/protocol/rest
 github.com/aws/aws-sdk-go/private/protocol/restjson
 github.com/aws/aws-sdk-go/private/protocol/restxml
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
-github.com/aws/aws-sdk-go/service/cloudformation
-github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface
-github.com/aws/aws-sdk-go/service/cloudwatchlogs
-github.com/aws/aws-sdk-go/service/cloudwatchlogs/cloudwatchlogsiface
 github.com/aws/aws-sdk-go/service/ecr
 github.com/aws/aws-sdk-go/service/ecr/ecriface
 github.com/aws/aws-sdk-go/service/s3
 github.com/aws/aws-sdk-go/service/s3/s3iface
 github.com/aws/aws-sdk-go/service/s3/s3manager
-github.com/aws/aws-sdk-go/service/sqs
-github.com/aws/aws-sdk-go/service/sqs/sqsiface
 github.com/aws/aws-sdk-go/service/sso
 github.com/aws/aws-sdk-go/service/sso/ssoiface
 github.com/aws/aws-sdk-go/service/sts
@@ -308,10 +302,6 @@ github.com/goware/modvendor
 # github.com/hashicorp/golang-lru v0.5.1
 github.com/hashicorp/golang-lru
 github.com/hashicorp/golang-lru/simplelru
-# github.com/headzoo/surf v1.0.0
-## explicit
-# github.com/headzoo/ut v0.0.0-20181013193318-a13b5a7a02ca
-## explicit
 # github.com/ijc/Gotty v0.0.0-20170406111628-a8b993ba6abd
 github.com/ijc/Gotty
 # github.com/imdario/mergo v0.3.7

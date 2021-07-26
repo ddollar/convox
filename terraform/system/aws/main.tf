@@ -8,6 +8,14 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
+provider "helm" {
+  kubernetes {
+    cluster_ca_certificate = module.cluster.ca
+    host                   = module.cluster.endpoint
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
 data "aws_eks_cluster_auth" "cluster" {
   name = module.cluster.id
 }
@@ -57,6 +65,7 @@ module "rack" {
 
   providers = {
     aws        = aws
+    helm       = helm
     kubernetes = kubernetes
   }
 
