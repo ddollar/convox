@@ -5,16 +5,11 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/cloudformation"
-	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs/cloudwatchlogsiface"
 	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
-	"github.com/aws/aws-sdk-go/service/sqs"
-	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
+	"github.com/convox/convox/pkg/loki"
 	"github.com/convox/convox/pkg/structs"
 	"github.com/convox/convox/provider/k8s"
 )
@@ -25,11 +20,10 @@ type Provider struct {
 	Bucket string
 	Region string
 
-	CloudFormation cloudformationiface.CloudFormationAPI
-	CloudWatchLogs cloudwatchlogsiface.CloudWatchLogsAPI
-	ECR            ecriface.ECRAPI
-	S3             s3iface.S3API
-	SQS            sqsiface.SQSAPI
+	ECR ecriface.ECRAPI
+	S3  s3iface.S3API
+
+	loki *loki.Client
 }
 
 func FromEnv() (*Provider, error) {
@@ -73,11 +67,15 @@ func (p *Provider) initializeAwsServices() error {
 		return err
 	}
 
-	p.CloudFormation = cloudformation.New(s)
-	p.CloudWatchLogs = cloudwatchlogs.New(s)
 	p.ECR = ecr.New(s)
 	p.S3 = s3.New(s)
-	p.SQS = sqs.New(s)
+
+	lc, err := loki.New(os.Getenv("LOKI_URL"))
+	if err != nil {
+		return err
+	}
+
+	p.loki = lc
 
 	return nil
 }
