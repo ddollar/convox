@@ -1,10 +1,10 @@
 variable "annotations" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 
 variable "env" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 
@@ -27,8 +27,3 @@ variable "release" {
 variable "replicas" {
   default = 2
 }
-
-variable "set_priority_class" {
-  default = true
-}
-
