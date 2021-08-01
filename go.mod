@@ -1,20 +1,21 @@
 module github.com/convox/convox
 
-go 1.12
+go 1.16
 
 require (
-	cloud.google.com/go v0.38.0
-	github.com/Azure/azure-sdk-for-go v36.1.0+incompatible
-	github.com/Azure/azure-storage-file-go v0.6.0
-	github.com/Azure/go-autorest/autorest v0.9.2
-	github.com/Azure/go-autorest/autorest/adal v0.8.0 // indirect
-	github.com/Azure/go-autorest/autorest/azure/auth v0.4.0
-	github.com/Azure/go-autorest/autorest/to v0.3.0 // indirect
-	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
+	cloud.google.com/go v0.89.0 // indirect
+	cloud.google.com/go/storage v1.16.0
+	github.com/Azure/azure-sdk-for-go v56.0.0+incompatible
+	github.com/Azure/azure-storage-file-go v0.8.0
+	github.com/Azure/go-autorest/autorest v0.11.19
+	github.com/Azure/go-autorest/autorest/adal v0.9.14 // indirect
+	github.com/Azure/go-autorest/autorest/azure/auth v0.5.8
+	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
+	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/Microsoft/hcsshim v0.8.7-0.20190801035247-8694eade7dd3 // indirect
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/algolia/algoliasearch-client-go v2.25.0+incompatible
-	github.com/aws/aws-sdk-go v1.21.10
+	github.com/aws/aws-sdk-go v1.40.12
 	github.com/convox/changes v0.0.0-20191105034405-8c0df759a3b3
 	github.com/convox/exec v0.0.0-20180905012044-cc13d277f897
 	github.com/convox/logger v0.0.0-20180522214415-e39179955b52
@@ -27,28 +28,31 @@ require (
 	github.com/docker/docker v1.4.2-0.20190710153559-aa8249ae1b8b
 	github.com/dustin/go-humanize v1.0.0
 	github.com/elastic/go-elasticsearch/v6 v6.8.2
+	github.com/form3tech-oss/jwt-go v3.2.3+incompatible // indirect
 	github.com/fsouza/go-dockerclient v1.4.2
 	github.com/gobuffalo/packr v1.30.1
 	github.com/gobwas/glob v0.2.3
+	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/websocket v1.4.2 // indirect
-	github.com/goware/modvendor v0.1.0
+	github.com/goware/modvendor v0.3.0
 	github.com/headzoo/surf v1.0.0
 	github.com/headzoo/ut v0.0.0-20181013193318-a13b5a7a02ca // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/inconshreveable/go-update v0.0.0-20160112193335-8152e7eb6ccf
 	github.com/karalabe/xgo v0.0.0-20191115072854-c5ccff8648a7
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
-	github.com/mattn/go-zglob v0.0.1 // indirect
+	github.com/mattn/go-zglob v0.0.3 // indirect
 	github.com/miekg/dns v1.1.25
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/russross/blackfriday v2.0.0+incompatible
-	github.com/stretchr/testify v1.3.0
+	github.com/stretchr/testify v1.6.1
 	github.com/vektra/mockery v1.1.2
-	golang.org/x/crypto v0.0.0-20200214034016-1d94cc7ab1c6 // indirect
-	golang.org/x/sys v0.0.0-20200217220822-9197077df867 // indirect
-	google.golang.org/api v0.9.0
-	gopkg.in/yaml.v2 v2.2.4
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect
+	google.golang.org/api v0.52.0
+	google.golang.org/genproto v0.0.0-20210729151513-df9385d47c1b // indirect
+	gopkg.in/yaml.v2 v2.2.8
 	k8s.io/api v0.16.6
 	k8s.io/apimachinery v0.16.6
 	k8s.io/client-go v0.16.6
