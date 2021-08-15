@@ -7,7 +7,9 @@ locals {
   release = coalesce(var.release, local.current)
 }
 
-provider "kubernetes" {}
+provider "kubernetes" {
+  config_paths = split(":", var.kubeconfig)
+}
 
 module "platform" {
   source = "../../platform"
