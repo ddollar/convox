@@ -1,14 +1,10 @@
 variable "annotations" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 
-variable "docker_hub_authentication" {
-  type = string
-}
-
 variable "env" {
-  type    = map
+  type    = map(any)
   default = {}
 }
 
