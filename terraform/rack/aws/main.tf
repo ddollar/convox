@@ -17,6 +17,7 @@ module "api" {
 
   providers = {
     aws        = aws
+    helm       = helm
     kubernetes = kubernetes
   }
 
