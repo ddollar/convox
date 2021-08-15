@@ -5,28 +5,25 @@ locals {
   }
 }
 
-module "elasticsearch" {
-  source = "../../elasticsearch/k8s"
+resource "helm_release" "loki" {
+  name       = "loki"
+  repository = "https://grafana.github.io/helm-charts"
+  chart      = "loki-stack"
+  namespace  = var.namespace
 
-  providers = {
-    kubernetes = kubernetes
+  set {
+    name  = "loki.persistence.enabled"
+    value = "true"
   }
 
-  namespace = var.namespace
-}
-
-module "fluentd" {
-  source = "../../fluentd/elasticsearch"
-
-  providers = {
-    kubernetes = kubernetes
+  set {
+    name  = "loki.persistence.size"
+    value = "1Gi"
   }
 
-  cluster       = var.name
-  elasticsearch = module.elasticsearch.host
-  namespace     = var.namespace
-  rack          = var.name
-  syslog        = var.syslog
+  values = [
+    "{ promtail: { pipelineStages: [ cri: {} ] } }"
+  ]
 }
 
 module "k8s" {
@@ -51,7 +48,7 @@ module "k8s" {
 
   env = {
     CERT_MANAGER = "true"
-    ELASTIC_URL  = module.elasticsearch.url
+    LOKI_URL     = "http://loki.${var.namespace}.svc.cluster.local:3100"
     PROVIDER     = "metal"
     REGISTRY     = "registry.${var.domain}"
     RESOLVER     = var.resolver

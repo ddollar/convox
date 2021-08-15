@@ -20,6 +20,7 @@ module "api" {
   source = "../../api/metal"
 
   providers = {
+    helm       = helm
     kubernetes = kubernetes
   }
 
