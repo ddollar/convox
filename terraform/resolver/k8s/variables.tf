@@ -27,8 +27,3 @@ variable "release" {
 variable "replicas" {
   default = 2
 }
-
-variable "set_priority_class" {
-  default = true
-}
-
