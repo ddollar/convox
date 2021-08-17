@@ -8,6 +8,24 @@ locals {
   }
 }
 
+resource "helm_release" "loki" {
+  name       = "loki"
+  repository = "https://grafana.github.io/helm-charts"
+  chart      = "loki-stack"
+  namespace  = var.namespace
+
+  set {
+    name  = "loki.persistence.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "loki.persistence.size"
+    value = "1Gi"
+  }
+}
+
+
 module "k8s" {
   source = "../k8s"
 
@@ -33,6 +51,7 @@ module "k8s" {
     AWS_REGION   = data.aws_region.current.name
     BUCKET       = aws_s3_bucket.storage.id
     CERT_MANAGER = "true"
+    LOKI_URL     = "http://loki.${var.namespace}.svc.cluster.local:3100"
     PROVIDER     = "aws"
     RESOLVER     = var.resolver
     ROUTER       = var.router
