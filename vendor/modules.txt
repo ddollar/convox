@@ -302,6 +302,10 @@ github.com/goware/modvendor
 # github.com/hashicorp/golang-lru v0.5.1
 github.com/hashicorp/golang-lru
 github.com/hashicorp/golang-lru/simplelru
+# github.com/headzoo/surf v1.0.0
+## explicit
+# github.com/headzoo/ut v0.0.0-20181013193318-a13b5a7a02ca
+## explicit
 # github.com/ijc/Gotty v0.0.0-20170406111628-a8b993ba6abd
 github.com/ijc/Gotty
 # github.com/imdario/mergo v0.3.7
