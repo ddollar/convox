@@ -231,7 +231,7 @@ resource "kubernetes_deployment" "router" {
           }
 
           resources {
-            requests {
+            requests = {
               cpu    = "100m"
               memory = "90Mi"
             }
