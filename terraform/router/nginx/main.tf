@@ -26,16 +26,16 @@ resource "kubernetes_config_map" "udp-services" {
   }
 }
 
-resource "kubernetes_service_account" "ingress-nginx" {
+resource "kubernetes_service_account" "router" {
   metadata {
     namespace = var.namespace
-    name      = "ingress-nginx"
+    name      = "router"
   }
 }
 
-resource "kubernetes_cluster_role" "ingress-nginx" {
+resource "kubernetes_cluster_role" "router" {
   metadata {
-    name = "ingress-nginx"
+    name = "router"
   }
 
   rule {
@@ -81,28 +81,28 @@ resource "kubernetes_cluster_role" "ingress-nginx" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "ingress-nginx" {
+resource "kubernetes_cluster_role_binding" "router" {
   metadata {
-    name = "ingress-nginx"
+    name = "router"
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = "ingress-nginx"
+    name      = "router"
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = "ingress-nginx"
+    name      = "router"
     namespace = var.namespace
   }
 }
 
-resource "kubernetes_role" "ingress-nginx" {
+resource "kubernetes_role" "router" {
   metadata {
     namespace = var.namespace
-    name      = "ingress-nginx"
+    name      = "router"
   }
 
   rule {
@@ -131,36 +131,36 @@ resource "kubernetes_role" "ingress-nginx" {
   }
 }
 
-resource "kubernetes_role_binding" "ingress-nginx" {
+resource "kubernetes_role_binding" "router" {
   metadata {
     namespace = var.namespace
-    name      = "ingress-nginx"
+    name      = "router"
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "ingress-nginx"
+    name      = "router"
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = "ingress-nginx"
+    name      = "router"
     namespace = var.namespace
   }
 }
 
-resource "kubernetes_deployment" "ingress-nginx" {
+resource "kubernetes_deployment" "router" {
   metadata {
     namespace = var.namespace
-    name      = "ingress-nginx"
+    name      = "router"
   }
 
   spec {
     selector {
       match_labels = {
         system  = "convox"
-        service = "ingress-nginx"
+        service = "router"
       }
     }
 
@@ -168,17 +168,17 @@ resource "kubernetes_deployment" "ingress-nginx" {
       metadata {
         labels = {
           app     = "system"
-          name    = "ingress-nginx"
+          name    = "router"
           rack    = var.rack
           system  = "convox"
-          service = "ingress-nginx"
+          service = "router"
           type    = "service"
         }
       }
 
       spec {
         termination_grace_period_seconds = 300
-        service_account_name             = "ingress-nginx"
+        service_account_name             = "router"
         automount_service_account_token  = true
 
         container {
@@ -296,7 +296,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "router" {
     scale_target_ref {
       api_version = "apps/v1"
       kind        = "Deployment"
-      name        = "ingress-nginx"
+      name        = "router"
     }
   }
 }
