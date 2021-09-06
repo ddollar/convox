@@ -33,7 +33,6 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/gorilla/mux v1.7.3
-	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/goware/modvendor v0.3.0
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/inconshreveable/go-update v0.0.0-20160112193335-8152e7eb6ccf
@@ -50,10 +49,10 @@ require (
 	golang.org/x/sys v0.0.0-20210819072135-bce67f096156 // indirect
 	google.golang.org/api v0.52.0
 	google.golang.org/genproto v0.0.0-20210729151513-df9385d47c1b // indirect
-	gopkg.in/yaml.v2 v2.2.8
-	k8s.io/api v0.16.6
-	k8s.io/apimachinery v0.16.6
-	k8s.io/client-go v0.16.6
-	k8s.io/code-generator v0.16.6
+	gopkg.in/yaml.v2 v2.4.0
+	k8s.io/api v0.21.3
+	k8s.io/apimachinery v0.21.3
+	k8s.io/client-go v0.21.3
+	k8s.io/code-generator v0.21.3
 	k8s.io/klog v1.0.0
 )
