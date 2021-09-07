@@ -46,13 +46,12 @@ module "k8s" {
   }
 
   env = {
-    CERT_MANAGER = "true"
-    LOKI_URL     = "http://loki.${var.namespace}.svc.cluster.local:3100"
-    PROVIDER     = "metal"
-    REGISTRY     = "registry.${var.domain}"
-    RESOLVER     = var.resolver
-    ROUTER       = var.router
-    SECRET       = var.secret
+    LOKI_URL = "http://loki.${var.namespace}.svc.cluster.local:3100"
+    PROVIDER = "metal"
+    REGISTRY = "registry.${var.domain}"
+    RESOLVER = var.resolver
+    ROUTER   = var.router
+    SECRET   = var.secret
   }
 
   volumes = {

@@ -67,7 +67,6 @@ module "k8s" {
     AZURE_CLIENT_SECRET   = azuread_service_principal_password.api.value
     AZURE_SUBSCRIPTION_ID = data.azurerm_subscription.current.subscription_id
     AZURE_TENANT_ID       = data.azurerm_client_config.current.tenant_id
-    CERT_MANAGER          = "true"
     ELASTIC_URL           = module.elasticsearch.url
     PROVIDER              = "azure"
     REGION                = var.region

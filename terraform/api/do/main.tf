@@ -51,7 +51,6 @@ module "k8s" {
 
   env = {
     BUCKET          = digitalocean_spaces_bucket.storage.name
-    CERT_MANAGER    = "true"
     ELASTIC_URL     = module.elasticsearch.url
     PROVIDER        = "do"
     REGION          = var.region

@@ -19,6 +19,7 @@ import (
 	"github.com/gobuffalo/packr"
 	"github.com/pkg/errors"
 
+	ae "k8s.io/apimachinery/pkg/api/errors"
 	am "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -26,23 +27,22 @@ import (
 )
 
 type Provider struct {
-	Atom        atom.Interface
-	CertManager bool
-	Config      *rest.Config
-	Convox      cv.Interface
-	Cluster     kubernetes.Interface
-	Domain      string
-	Engine      Engine
-	Image       string
-	Name        string
-	Namespace   string
-	Password    string
-	Provider    string
-	Resolver    string
-	Router      string
-	Socket      string
-	Storage     string
-	Version     string
+	Atom      atom.Interface
+	Config    *rest.Config
+	Convox    cv.Interface
+	Cluster   kubernetes.Interface
+	Domain    string
+	Engine    Engine
+	Image     string
+	Name      string
+	Namespace string
+	Password  string
+	Provider  string
+	Resolver  string
+	Router    string
+	Socket    string
+	Storage   string
+	Version   string
 
 	ctx       context.Context
 	logger    *logger.Logger
@@ -84,22 +84,21 @@ func FromEnv() (*Provider, error) {
 	}
 
 	p := &Provider{
-		Atom:        ac,
-		CertManager: os.Getenv("CERT_MANAGER") == "true",
-		Config:      rc,
-		Convox:      cc,
-		Cluster:     kc,
-		Domain:      os.Getenv("DOMAIN"),
-		Image:       os.Getenv("IMAGE"),
-		Name:        ns.Labels["rack"],
-		Namespace:   ns.Name,
-		Password:    os.Getenv("PASSWORD"),
-		Provider:    common.CoalesceString(os.Getenv("PROVIDER"), "k8s"),
-		Resolver:    os.Getenv("RESOLVER"),
-		Router:      os.Getenv("ROUTER"),
-		Socket:      common.CoalesceString(os.Getenv("SOCKET"), "/var/run/docker.sock"),
-		Storage:     common.CoalesceString(os.Getenv("STORAGE"), "/var/storage"),
-		Version:     common.CoalesceString(os.Getenv("VERSION"), "dev"),
+		Atom:      ac,
+		Config:    rc,
+		Convox:    cc,
+		Cluster:   kc,
+		Domain:    os.Getenv("DOMAIN"),
+		Image:     os.Getenv("IMAGE"),
+		Name:      ns.Labels["rack"],
+		Namespace: ns.Name,
+		Password:  os.Getenv("PASSWORD"),
+		Provider:  common.CoalesceString(os.Getenv("PROVIDER"), "k8s"),
+		Resolver:  os.Getenv("RESOLVER"),
+		Router:    os.Getenv("ROUTER"),
+		Socket:    common.CoalesceString(os.Getenv("SOCKET"), "/var/run/docker.sock"),
+		Storage:   common.CoalesceString(os.Getenv("STORAGE"), "/var/storage"),
+		Version:   common.CoalesceString(os.Getenv("VERSION"), "dev"),
 	}
 
 	return p, nil
@@ -225,67 +224,37 @@ func (p *Provider) initializeTemplates() error {
 		return errors.WithStack(err)
 	}
 
-	if p.CertManager {
-		if err := p.applySystemTemplate("cert-manager", nil); err != nil {
-			return errors.WithStack(err)
-		}
-
-		go p.installCertManagerConfig()
+	if err := p.installCertManagerConfig(); err != nil {
+		return errors.WithStack(err)
 	}
 
 	return nil
 }
 
-func (p *Provider) installCertManagerConfig() {
-	tick := time.NewTicker(5 * time.Second)
-	defer tick.Stop()
-
-	timeout := time.NewTimer(10 * time.Minute)
-	defer timeout.Stop()
-
-	fmt.Printf("waiting for cert manager webhook deployment\n")
-
-	for {
-		select {
-		case <-tick.C:
-			d, err := p.Cluster.AppsV1().Deployments("cert-manager").Get(context.Background(), "cert-manager-webhook", am.GetOptions{})
-			if err != nil {
-				fmt.Printf("could not get cert manager webhook deployment: %s\n", err)
-				continue
-			}
-
-			for _, c := range d.Status.Conditions {
-				if c.Type == "Available" && c.Status == "True" {
-					fmt.Printf("installing cert manager letsencrypt config\n")
-
-					if err := p.applySystemTemplate("cert-manager-letsencrypt", nil); err != nil {
-						fmt.Printf("could not install cert manager letsencrypt config: %s\n", err)
-						break
-					}
-
-					if cas, err := p.Cluster.CoreV1().Secrets(p.Namespace).Get(context.Background(), "ca", am.GetOptions{}); err == nil {
-						params := map[string]interface{}{
-							"CaPublic":  base64.StdEncoding.EncodeToString(cas.Data["tls.crt"]),
-							"CaPrivate": base64.StdEncoding.EncodeToString(cas.Data["tls.key"]),
-						}
-
-						fmt.Printf("installing cert manager letsencrypt config\n")
-
-						if err := p.applySystemTemplate("cert-manager-self-signed", params); err != nil {
-							fmt.Printf("could not install cert manager letsencrypt config: %s\n", err)
-							break
-						}
-
-					}
-
-					return
-				}
-			}
-		case <-timeout.C:
-			fmt.Printf("error: timeout installing cluster issuer\n")
-			return
-		}
+func (p *Provider) installCertManagerConfig() error {
+	if err := p.applySystemTemplate("cert-manager-letsencrypt", nil); err != nil {
+		return fmt.Errorf("could not install letsencrypt cluster issuer: %s", err)
 	}
+
+	cas, err := p.Cluster.CoreV1().Secrets(p.Namespace).Get(context.Background(), "ca", am.GetOptions{})
+	if err != nil {
+		if ae.IsNotFound(err) {
+			return nil
+		}
+
+		return fmt.Errorf("could not load convox ca: %s", err)
+	}
+
+	params := map[string]interface{}{
+		"CaPublic":  base64.StdEncoding.EncodeToString(cas.Data["tls.crt"]),
+		"CaPrivate": base64.StdEncoding.EncodeToString(cas.Data["tls.key"]),
+	}
+
+	if err := p.applySystemTemplate("cert-manager-self-signed", params); err != nil {
+		return fmt.Errorf("could not install self-signed cluster issuer: %s", err)
+	}
+
+	return nil
 }
 
 func (p *Provider) startApiProxy() {

@@ -9,6 +9,8 @@ provider "google-beta" {
 }
 
 provider "kubernetes" {
+  experiments { manifest_resource = true }
+
   client_certificate     = module.cluster.client_certificate
   client_key             = module.cluster.client_key
   cluster_ca_certificate = module.cluster.ca
@@ -26,6 +28,15 @@ data "http" "releases" {
 locals {
   current = jsondecode(data.http.releases.body).tag_name
   release = coalesce(var.release, local.current)
+}
+
+module "cert-manager" {
+  source = "../../cert-manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "cluster" {

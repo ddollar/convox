@@ -48,13 +48,12 @@ module "k8s" {
   }
 
   env = {
-    AWS_REGION   = data.aws_region.current.name
-    BUCKET       = aws_s3_bucket.storage.id
-    CERT_MANAGER = "true"
-    LOKI_URL     = "http://loki.${var.namespace}.svc.cluster.local:3100"
-    PROVIDER     = "aws"
-    RESOLVER     = var.resolver
-    ROUTER       = var.router
-    SOCKET       = "/var/run/docker.sock"
+    AWS_REGION = data.aws_region.current.name
+    BUCKET     = aws_s3_bucket.storage.id
+    LOKI_URL   = "http://loki.${var.namespace}.svc.cluster.local:3100"
+    PROVIDER   = "aws"
+    RESOLVER   = var.resolver
+    ROUTER     = var.router
+    SOCKET     = "/var/run/docker.sock"
   }
 }

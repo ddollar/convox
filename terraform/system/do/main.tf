@@ -4,6 +4,8 @@ provider "digitalocean" {
 }
 
 provider "kubernetes" {
+  experiments { manifest_resource = true }
+
   cluster_ca_certificate = module.cluster.ca
   host                   = module.cluster.endpoint
   token                  = module.cluster.token
@@ -16,6 +18,15 @@ data "http" "releases" {
 locals {
   current = jsondecode(data.http.releases.body).tag_name
   release = coalesce(var.release, local.current)
+}
+
+module "cert-manager" {
+  source = "../../cert-manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "cluster" {

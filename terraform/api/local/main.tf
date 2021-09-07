@@ -28,13 +28,12 @@ module "k8s" {
   }
 
   env = {
-    CERT_MANAGER = "true"
-    PROVIDER     = "local"
-    REGISTRY     = "registry.${var.domain}"
-    RESOLVER     = var.resolver
-    ROUTER       = var.router
-    SECRET       = var.secret
-    STORAGE      = "/var/storage"
+    PROVIDER = "local"
+    REGISTRY = "registry.${var.domain}"
+    RESOLVER = var.resolver
+    ROUTER   = var.router
+    SECRET   = var.secret
+    STORAGE  = "/var/storage"
   }
 
   volumes = {

@@ -8,11 +8,22 @@ locals {
 }
 
 provider "kubernetes" {
+  experiments { manifest_resource = true }
+
   config_paths = split(":", var.kubeconfig)
 }
 
 module "platform" {
   source = "../../platform"
+}
+
+module "cert-manager" {
+  source = "../../cert-manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "rack" {

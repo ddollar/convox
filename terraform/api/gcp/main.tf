@@ -54,16 +54,15 @@ module "k8s" {
   }
 
   env = {
-    BUCKET       = google_storage_bucket.storage.name
-    CERT_MANAGER = "true"
-    ELASTIC_URL  = module.elasticsearch.url
-    KEY          = google_service_account_key.api.private_key
-    PROJECT      = data.google_client_config.current.project,
-    PROVIDER     = "gcp"
-    REGION       = data.google_client_config.current.region
-    REGISTRY     = data.google_container_registry_repository.registry.repository_url
-    RESOLVER     = var.resolver
-    ROUTER       = var.router
-    SOCKET       = "/var/run/docker.sock"
+    BUCKET      = google_storage_bucket.storage.name
+    ELASTIC_URL = module.elasticsearch.url
+    KEY         = google_service_account_key.api.private_key
+    PROJECT     = data.google_client_config.current.project,
+    PROVIDER    = "gcp"
+    REGION      = data.google_client_config.current.region
+    REGISTRY    = data.google_container_registry_repository.registry.repository_url
+    RESOLVER    = var.resolver
+    ROUTER      = var.router
+    SOCKET      = "/var/run/docker.sock"
   }
 }

@@ -1,4 +1,4 @@
-.PHONY: all build clean clean-package compress dev generate generate-k8s generate-provider mocks package release test tools vendor
+.PHONY: all build clean clean-package compress dev generate generate-k8s generate-provider lint mocks package release test tools vendor
 
 commands = api atom build convox docs resolver
 
@@ -41,6 +41,9 @@ generate-provider:
 	go run cmd/generate/main.go controllers > pkg/api/controllers.go
 	go run cmd/generate/main.go routes > pkg/api/routes.go
 	go run cmd/generate/main.go sdk > sdk/methods.go
+
+lint:
+	golangci-lint run
 
 mocks: generate-provider
 	make -C pkg/atom mocks

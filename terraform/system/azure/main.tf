@@ -3,6 +3,8 @@ provider "azurerm" {
 }
 
 provider "kubernetes" {
+  experiments { manifest_resource = true }
+
   client_certificate     = module.cluster.client_certificate
   client_key             = module.cluster.client_key
   cluster_ca_certificate = module.cluster.ca
@@ -23,6 +25,16 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_resource_group" "rack" {
   name     = var.name
   location = var.region
+}
+
+
+module "cert-manager" {
+  source = "../../cert-manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "cluster" {

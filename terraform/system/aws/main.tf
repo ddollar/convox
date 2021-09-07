@@ -3,6 +3,8 @@ provider "aws" {
 }
 
 provider "kubernetes" {
+  experiments { manifest_resource = true }
+
   cluster_ca_certificate = module.cluster.ca
   host                   = module.cluster.endpoint
   token                  = data.aws_eks_cluster_auth.cluster.token
@@ -29,6 +31,15 @@ locals {
   release = coalesce(var.release, local.current)
 }
 
+module "cert-manager" {
+  source = "../../cert-manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
+
 module "cluster" {
   source = "../../cluster/aws"
 
@@ -42,22 +53,6 @@ module "cluster" {
   node_disk          = var.node_disk
   node_type          = var.node_type
   private            = var.private
-}
-
-module "fluentd" {
-  source = "../../fluentd/aws"
-
-  providers = {
-    aws        = aws
-    kubernetes = kubernetes
-  }
-
-  cluster   = module.cluster.id
-  namespace = "kube-system"
-  oidc_arn  = module.cluster.oidc_arn
-  oidc_sub  = module.cluster.oidc_sub
-  rack      = var.name
-  syslog    = var.syslog
 }
 
 module "rack" {
