@@ -7,16 +7,17 @@ locals {
   release = coalesce(var.release, local.current)
 }
 
-provider "kubernetes" {
-  experiments { manifest_resource = true }
-
-  config_paths = split(":", var.kubeconfig)
-}
-
 provider "helm" {
   kubernetes {
     config_paths = split(":", var.kubeconfig)
   }
+}
+
+
+provider "kubernetes" {
+  experiments { manifest_resource = true }
+
+  config_paths = split(":", var.kubeconfig)
 }
 
 module "cert-manager" {

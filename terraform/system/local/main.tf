@@ -7,6 +7,12 @@ locals {
   release = coalesce(var.release, local.current)
 }
 
+provider "helm" {
+  kubernetes {
+    config_paths = split(":", var.kubeconfig)
+  }
+}
+
 provider "kubernetes" {
   experiments { manifest_resource = true }
 
