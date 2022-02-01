@@ -156,7 +156,6 @@ github.com/creack/pty
 github.com/davecgh/go-spew/spew
 # github.com/ddollar/go-u2fhost v0.0.0-20200214123511-3ca2df7a0b44
 ## explicit
-github.com/ddollar/go-u2fhost
 # github.com/dimchansky/utfbom v1.1.1
 github.com/dimchansky/utfbom
 # github.com/docker/distribution v2.7.1+incompatible
@@ -324,8 +323,6 @@ github.com/json-iterator/go
 github.com/jstemmer/go-junit-report
 github.com/jstemmer/go-junit-report/formatter
 github.com/jstemmer/go-junit-report/parser
-# github.com/karalabe/hid v1.0.0
-github.com/karalabe/hid
 # github.com/karalabe/xgo v0.0.0-20191115072854-c5ccff8648a7
 ## explicit
 github.com/karalabe/xgo
@@ -340,9 +337,6 @@ github.com/konsorten/go-windows-terminal-sequences
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
-# github.com/marshallbrekka/go-u2fhost v0.0.0-20200114212649-cc764c209ee9
-github.com/marshallbrekka/go-u2fhost/bytes
-github.com/marshallbrekka/go-u2fhost/hid
 # github.com/mattn/go-ieproxy v0.0.0-20190610004146-91bb50d98149
 github.com/mattn/go-ieproxy
 # github.com/mattn/go-zglob v0.0.3

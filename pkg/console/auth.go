@@ -3,11 +3,9 @@ package console
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"regexp"
 
-	"github.com/convox/convox/pkg/token"
 	"github.com/convox/convox/sdk"
 	"github.com/convox/stdsdk"
 )
@@ -38,28 +36,7 @@ func (c *Client) authenticator(cl *stdsdk.Client, res *http.Response) (http.Head
 	headers := map[string]string{}
 
 	if m[2] == "true" {
-		ares, err := cl.GetStream(m[1], stdsdk.RequestOptions{})
-		if err != nil {
-			return nil, err
-		}
-		defer ares.Body.Close()
-
-		dres, err := ioutil.ReadAll(ares.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		c.handler.Writef("Waiting for security token... ")
-
-		data, err := token.Authenticate(dres)
-		if err != nil {
-			return nil, AuthenticationError{err}
-		}
-
-		c.handler.Writef("<ok>OK</ok>\n")
-
-		body = data
-		headers["Challenge"] = ares.Header.Get("Challenge")
+		return nil, fmt.Errorf("token authentication not supported")
 	}
 
 	var s session
@@ -70,7 +47,6 @@ func (c *Client) authenticator(cl *stdsdk.Client, res *http.Response) (http.Head
 	}
 
 	if err := cl.Post(m[1], ro, &s); err != nil {
-		fmt.Printf("err: %+v\n", err)
 		return nil, err
 	}
 
