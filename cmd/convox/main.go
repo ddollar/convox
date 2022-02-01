@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	image   = "convox/convox"
+	image   = "ddollar/convox"
 	version = "dev"
 )
 

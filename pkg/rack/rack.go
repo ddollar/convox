@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	Image      = "convox/convox"
+	Image      = "ddollar/convox"
 	TestLatest string
 )
 
