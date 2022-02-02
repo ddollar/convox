@@ -14,12 +14,12 @@ metadata:
     type: app
   name: rack1-app1
   ownerReferences:
-  - apiVersion: v1
-    blockOwnerDeletion: true
-    controller: true
-    kind: Namespace
-    name: ns1
-    uid: uid1
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Namespace
+      name: ns1
+      uid: uid1
 ---
 apiVersion: v1
 kind: Service
@@ -41,19 +41,19 @@ metadata:
 spec:
   externalTrafficPolicy: Cluster
   loadBalancerSourceRanges:
-  - 127.0.0.0/16
+    - 127.0.0.0/16
   ports:
-  - name: "80"
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - name: "80"
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   selector:
     release: RELEASE2
     service: web
     type: service
   type: LoadBalancer
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
@@ -84,18 +84,18 @@ metadata:
   namespace: rack1-app1
 spec:
   rules:
-  - host: service.host
-    http:
-      paths:
-      - backend:
-          serviceName: web
-          servicePort: 5000
+    - host: service.host
+      http:
+        paths:
+          - backend:
+              serviceName: web
+              servicePort: 5000
   tls:
-  - hosts:
-    - service.host
-    secretName: cert-web
+    - hosts:
+        - service.host
+      secretName: cert-web
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
@@ -126,16 +126,16 @@ metadata:
   namespace: rack1-app1
 spec:
   rules:
-  - host: service.host
-    http:
-      paths:
-      - backend:
-          serviceName: web2
-          servicePort: 5000
+    - host: service.host
+      http:
+        paths:
+          - backend:
+              serviceName: web2
+              servicePort: 5000
   tls:
-  - hosts:
-    - service.host
-    secretName: cert-web2
+    - hosts:
+        - service.host
+      secretName: cert-web2
 ---
 apiVersion: v1
 data:
@@ -167,7 +167,7 @@ metadata:
   namespace: rack1-app1
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
@@ -207,27 +207,27 @@ spec:
         type: resource
     spec:
       containers:
-      - env:
-        - name: POSTGRES_DB
-          value: app
-        - name: POSTGRES_USER
-          value: app
-        - name: POSTGRES_PASSWORD
-          value: 6630abdb8bba553e3e48555e302e51
-        - name: PGDATA
-          value: /var/lib/postgresql/data/data
-        image: postgres:10.5
-        imagePullPolicy: IfNotPresent
-        name: postgres
-        ports:
-        - containerPort: 5432
-        volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: data
+        - env:
+            - name: POSTGRES_DB
+              value: app
+            - name: POSTGRES_USER
+              value: app
+            - name: POSTGRES_PASSWORD
+              value: 6630abdb8bba553e3e48555e302e51
+            - name: PGDATA
+              value: /var/lib/postgresql/data/data
+          image: postgres:10.5
+          imagePullPolicy: IfNotPresent
+          name: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data
       volumes:
-      - name: data
-        persistentVolumeClaim:
-          claimName: resource-four
+        - name: data
+          persistentVolumeClaim:
+            claimName: resource-four
 ---
 apiVersion: v1
 kind: Service
@@ -244,7 +244,7 @@ metadata:
   namespace: rack1-app1
 spec:
   ports:
-  - port: 5432
+    - port: 5432
   selector:
     app: app1
     rack: rack1
@@ -282,7 +282,7 @@ metadata:
   namespace: rack1-app1
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
@@ -322,27 +322,27 @@ spec:
         type: resource
     spec:
       containers:
-      - env:
-        - name: POSTGRES_DB
-          value: app
-        - name: POSTGRES_USER
-          value: app
-        - name: POSTGRES_PASSWORD
-          value: 6630abdb8bba553e3e48555e302e51
-        - name: PGDATA
-          value: /var/lib/postgresql/data/data
-        image: postgres:10.5
-        imagePullPolicy: IfNotPresent
-        name: postgres
-        ports:
-        - containerPort: 5432
-        volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: data
+        - env:
+            - name: POSTGRES_DB
+              value: app
+            - name: POSTGRES_USER
+              value: app
+            - name: POSTGRES_PASSWORD
+              value: 6630abdb8bba553e3e48555e302e51
+            - name: PGDATA
+              value: /var/lib/postgresql/data/data
+          image: postgres:10.5
+          imagePullPolicy: IfNotPresent
+          name: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data
       volumes:
-      - name: data
-        persistentVolumeClaim:
-          claimName: resource-one
+        - name: data
+          persistentVolumeClaim:
+            claimName: resource-one
 ---
 apiVersion: v1
 kind: Service
@@ -359,7 +359,7 @@ metadata:
   namespace: rack1-app1
 spec:
   ports:
-  - port: 5432
+    - port: 5432
   selector:
     app: app1
     rack: rack1
@@ -413,7 +413,7 @@ metadata:
   namespace: rack1-app1
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
@@ -453,24 +453,24 @@ spec:
         type: resource
     spec:
       containers:
-      - env:
-        - name: MYSQL_DATABASE
-          value: app
-        - name: MYSQL_ROOT_PASSWORD
-          value: 6630abdb8bba553e3e48555e302e51
-        image: mysql:5.7.23
-        imagePullPolicy: IfNotPresent
-        name: mysql
-        ports:
-        - containerPort: 3306
-        volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: data
-          subPath: mysql
+        - env:
+            - name: MYSQL_DATABASE
+              value: app
+            - name: MYSQL_ROOT_PASSWORD
+              value: 6630abdb8bba553e3e48555e302e51
+          image: mysql:5.7.23
+          imagePullPolicy: IfNotPresent
+          name: mysql
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: data
+              subPath: mysql
       volumes:
-      - name: data
-        persistentVolumeClaim:
-          claimName: resource-two
+        - name: data
+          persistentVolumeClaim:
+            claimName: resource-two
 ---
 apiVersion: v1
 kind: Service
@@ -487,7 +487,7 @@ metadata:
   namespace: rack1-app1
 spec:
   ports:
-  - port: 3306
+    - port: 3306
   selector:
     app: app1
     rack: rack1
@@ -573,44 +573,44 @@ spec:
         type: service
     spec:
       containers:
-      - env:
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        envFrom:
-        - secretRef:
-            name: env-agent
-        image: repo1:agent.build1
-        imagePullPolicy: IfNotPresent
-        name: app1
-        ports:
-        - containerPort: 8125
-          hostPort: 8125
-          name: port-8125
-          protocol: UDP
-        - containerPort: 8126
-          hostPort: 8126
-          name: port-8126
-          protocol: TCP
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            cpu: 256m
-            memory: 512Mi
-        volumeMounts:
-        - mountPath: /etc/convox
-          name: ca
+        - env:
+            - name: INSTANCE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          envFrom:
+            - secretRef:
+                name: env-agent
+          image: repo1:agent.build1
+          imagePullPolicy: IfNotPresent
+          name: app1
+          ports:
+            - containerPort: 8125
+              hostPort: 8125
+              name: port-8125
+              protocol: UDP
+            - containerPort: 8126
+              hostPort: 8126
+              name: port-8126
+              protocol: TCP
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /etc/convox
+              name: ca
       hostNetwork: true
       serviceAccountName: agent
       shareProcessNamespace: true
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+        - configMap:
+            name: ca
+            optional: true
           name: ca
-          optional: true
-        name: ca
 ---
 apiVersion: v1
 kind: Service
@@ -628,14 +628,14 @@ metadata:
   namespace: rack1-app1
 spec:
   ports:
-  - name: port-8125
-    port: 8125
-    protocol: UDP
-    targetPort: 8125
-  - name: port-8126
-    port: 8126
-    protocol: TCP
-    targetPort: 8126
+    - name: port-8125
+      port: 8125
+      protocol: UDP
+      targetPort: 8125
+    - name: port-8126
+      port: 8126
+      protocol: TCP
+      targetPort: 8126
   selector:
     service: agent
     type: service
@@ -725,35 +725,35 @@ spec:
         type: service
     spec:
       containers:
-      - env:
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        envFrom:
-        - secretRef:
-            name: env-deployment
-        image: repo1:deployment.build1
-        imagePullPolicy: IfNotPresent
-        name: app1
-        ports: null
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            cpu: 256m
-            memory: 512Mi
-        volumeMounts:
-        - mountPath: /etc/convox
-          name: ca
+        - env:
+            - name: INSTANCE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          envFrom:
+            - secretRef:
+                name: env-deployment
+          image: repo1:deployment.build1
+          imagePullPolicy: IfNotPresent
+          name: app1
+          ports: null
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /etc/convox
+              name: ca
       serviceAccountName: deployment
       shareProcessNamespace: true
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+        - configMap:
+            name: ca
+            optional: true
           name: ca
-          optional: true
-        name: ca
 ---
 apiVersion: v1
 data:
@@ -839,35 +839,35 @@ spec:
         type: service
     spec:
       containers:
-      - env:
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        envFrom:
-        - secretRef:
-            name: env-singleton
-        image: repo1:singleton.build1
-        imagePullPolicy: IfNotPresent
-        name: app1
-        ports: null
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            cpu: 256m
-            memory: 512Mi
-        volumeMounts:
-        - mountPath: /etc/convox
-          name: ca
+        - env:
+            - name: INSTANCE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          envFrom:
+            - secretRef:
+                name: env-singleton
+          image: repo1:singleton.build1
+          imagePullPolicy: IfNotPresent
+          name: app1
+          ports: null
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /etc/convox
+              name: ca
       serviceAccountName: singleton
       shareProcessNamespace: true
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+        - configMap:
+            name: ca
+            optional: true
           name: ca
-          optional: true
-        name: ca
 ---
 apiVersion: v1
 data:
@@ -954,67 +954,67 @@ spec:
         type: service
     spec:
       containers:
-      - env:
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: ONE_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-one
-        - name: OTHER_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-two
-        - name: THREE_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-three
-        - name: FOUR_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-four
-        envFrom:
-        - secretRef:
-            name: env-web
-        image: repo1:web.build1
-        imagePullPolicy: IfNotPresent
-        name: app1
-        ports:
-        - containerPort: 5000
-          name: main
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 5000
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 4
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            cpu: 256m
-            memory: 512Mi
-        volumeMounts:
-        - mountPath: /etc/convox
-          name: ca
+        - env:
+            - name: INSTANCE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: ONE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-one
+            - name: OTHER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-two
+            - name: THREE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-three
+            - name: FOUR_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-four
+          envFrom:
+            - secretRef:
+                name: env-web
+          image: repo1:web.build1
+          imagePullPolicy: IfNotPresent
+          name: app1
+          ports:
+            - containerPort: 5000
+              name: main
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 4
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /etc/convox
+              name: ca
       serviceAccountName: web
       shareProcessNamespace: true
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+        - configMap:
+            name: ca
+            optional: true
           name: ca
-          optional: true
-        name: ca
 ---
 apiVersion: v1
 kind: Service
@@ -1032,10 +1032,10 @@ metadata:
   namespace: rack1-app1
 spec:
   ports:
-  - name: main
-    port: 5000
-    protocol: TCP
-    targetPort: main
+    - name: main
+      port: 5000
+      protocol: TCP
+      targetPort: main
   selector:
     service: web
     type: service
@@ -1126,67 +1126,67 @@ spec:
         type: service
     spec:
       containers:
-      - env:
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: ONE_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-one
-        - name: OTHER_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-two
-        - name: THREE_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-three
-        - name: FOUR_URL
-          valueFrom:
-            configMapKeyRef:
-              key: URL
-              name: resource-four
-        envFrom:
-        - secretRef:
-            name: env-web2
-        image: repo1:web2.build1
-        imagePullPolicy: IfNotPresent
-        name: app1
-        ports:
-        - containerPort: 5000
-          name: main
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 5000
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 4
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            cpu: 256m
-            memory: 512Mi
-        volumeMounts:
-        - mountPath: /etc/convox
-          name: ca
+        - env:
+            - name: INSTANCE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: ONE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-one
+            - name: OTHER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-two
+            - name: THREE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-three
+            - name: FOUR_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: URL
+                  name: resource-four
+          envFrom:
+            - secretRef:
+                name: env-web2
+          image: repo1:web2.build1
+          imagePullPolicy: IfNotPresent
+          name: app1
+          ports:
+            - containerPort: 5000
+              name: main
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 4
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /etc/convox
+              name: ca
       serviceAccountName: web2
       shareProcessNamespace: true
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+        - configMap:
+            name: ca
+            optional: true
           name: ca
-          optional: true
-        name: ca
 ---
 apiVersion: v1
 kind: Service
@@ -1204,10 +1204,10 @@ metadata:
   namespace: rack1-app1
 spec:
   ports:
-  - name: main
-    port: 5000
-    protocol: TCP
-    targetPort: main
+    - name: main
+      port: 5000
+      protocol: TCP
+      targetPort: main
   selector:
     service: web2
     type: service
@@ -1215,7 +1215,7 @@ spec:
 ---
 null
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   labels:
@@ -1244,56 +1244,56 @@ spec:
             type: timer
         spec:
           containers:
-          - args:
-            - bin/test
-            env:
-            - name: INSTANCE_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
-            - name: ONE_URL
-              valueFrom:
-                configMapKeyRef:
-                  key: URL
-                  name: resource-one
-            - name: OTHER_URL
-              valueFrom:
-                configMapKeyRef:
-                  key: URL
-                  name: resource-two
-            - name: THREE_URL
-              valueFrom:
-                configMapKeyRef:
-                  key: URL
-                  name: resource-three
-            - name: FOUR_URL
-              valueFrom:
-                configMapKeyRef:
-                  key: URL
-                  name: resource-four
-            envFrom:
-            - secretRef:
-                name: env-web
-            image: repo1:web.build1
-            imagePullPolicy: IfNotPresent
-            name: app1
-            resources:
-              limits:
-                memory: 512Mi
-              requests:
-                cpu: 256m
-                memory: 512Mi
-            volumeMounts:
-            - mountPath: /etc/convox
-              name: ca
+            - args:
+                - bin/test
+              env:
+                - name: INSTANCE_IP
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: status.hostIP
+                - name: ONE_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: URL
+                      name: resource-one
+                - name: OTHER_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: URL
+                      name: resource-two
+                - name: THREE_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: URL
+                      name: resource-three
+                - name: FOUR_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      key: URL
+                      name: resource-four
+              envFrom:
+                - secretRef:
+                    name: env-web
+              image: repo1:web.build1
+              imagePullPolicy: IfNotPresent
+              name: app1
+              resources:
+                limits:
+                  memory: 512Mi
+                requests:
+                  cpu: 256m
+                  memory: 512Mi
+              volumeMounts:
+                - mountPath: /etc/convox
+                  name: ca
           restartPolicy: Never
           shareProcessNamespace: true
           volumes:
-          - configMap:
+            - configMap:
+                name: ca
+                optional: true
               name: ca
-              optional: true
-            name: ca
-  schedule: '*/5 * * * *'
+  schedule: "*/5 * * * *"
   successfulJobsHistoryLimit: 1
 ---
 null

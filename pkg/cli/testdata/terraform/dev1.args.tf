@@ -1,5 +1,5 @@
 		module "system" {
-			source = "github.com/convox/convox//terraform/system/local?ref=foo"
+			source = "github.com/ddollar/convox//terraform/system/local?ref=foo"
 			baz = "qux"
 			foo = "bar"
 			kubeconfig = "~/.kube/config"

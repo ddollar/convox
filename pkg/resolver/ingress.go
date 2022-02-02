@@ -5,8 +5,8 @@ import (
 	"sync"
 
 	ac "k8s.io/api/core/v1"
-	ae "k8s.io/api/extensions/v1beta1"
-	ie "k8s.io/client-go/informers/extensions/v1beta1"
+	an "k8s.io/api/networking/v1"
+	in "k8s.io/client-go/informers/networking/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 )
@@ -26,7 +26,7 @@ func NewIngress(kc *kubernetes.Clientset) (*Ingress, error) {
 		stopch: make(chan struct{}),
 	}
 
-	i.informer = ie.NewFilteredIngressInformer(kc, ac.NamespaceAll, 0, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, listOptions)
+	i.informer = in.NewFilteredIngressInformer(kc, ac.NamespaceAll, 0, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, listOptions)
 
 	i.informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc:    i.add,
@@ -108,20 +108,20 @@ func (i *Ingress) update(prev, cur interface{}) {
 	i.addIngress(ci)
 }
 
-func (i *Ingress) addIngress(in *ae.Ingress) {
+func (i *Ingress) addIngress(in *an.Ingress) {
 	for _, r := range in.Spec.Rules {
 		i.hosts[r.Host] = true
 	}
 }
 
-func (i *Ingress) deleteIngress(in *ae.Ingress) {
+func (i *Ingress) deleteIngress(in *an.Ingress) {
 	for _, r := range in.Spec.Rules {
 		delete(i.hosts, r.Host)
 	}
 }
 
-func assertIngress(v interface{}) (*ae.Ingress, error) {
-	i, ok := v.(*ae.Ingress)
+func assertIngress(v interface{}) (*an.Ingress, error) {
+	i, ok := v.(*an.Ingress)
 	if !ok {
 		return nil, fmt.Errorf("could not assert ingress for type: %T", v)
 	}

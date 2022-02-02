@@ -1,5 +1,5 @@
 		module "system" {
-			source = "github.com/convox/convox//terraform/system/local"
+			source = "github.com/ddollar/convox//terraform/system/local"
 			baz = "qux"
 			foo = "bar"
 			name = "dev2"

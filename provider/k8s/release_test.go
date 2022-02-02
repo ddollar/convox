@@ -16,6 +16,7 @@ import (
 	cv "github.com/convox/convox/provider/k8s/pkg/client/clientset/versioned"
 	cvfake "github.com/convox/convox/provider/k8s/pkg/client/clientset/versioned/fake"
 	"github.com/pkg/errors"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	yaml "gopkg.in/yaml.v2"
 	am "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -89,20 +90,17 @@ func TestReleasePromote(t *testing.T) {
 		require.NoError(t, releaseCreate(kc, "rack1-app1", "release2", "basic"))
 
 		aa.On("Status", "rack1-app1", "app").Return("Running", "release1", nil)
-		require.NoError(t, releaseApply(aa, "rack1-app1", "release2", "app", "basic-app"))
+		require.NoError(t, releaseApply(t, aa, "rack1-app1", "release2", "app", "basic-app"))
 
 		err := p.ReleasePromote("app1", "release2", structs.ReleasePromoteOptions{})
 		require.NoError(t, err)
 	})
 }
 
-func releaseApply(aa *atom.MockInterface, ns, id, atom, fixture string) error {
-	data, err := ioutil.ReadFile(fmt.Sprintf("testdata/release-%s.yml", fixture))
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	aa.On("Apply", ns, atom, id, data, int32(1800)).Return(nil).Once()
+func releaseApply(t *testing.T, aa *atom.MockInterface, ns, id, atom, fixture string) error {
+	aa.On("Apply", ns, atom, id, mock.Anything, int32(1800)).Return(nil).Once().Run(func(args mock.Arguments) {
+		requireYamlFixture(t, args.Get(3).([]byte), fmt.Sprintf("release-%s.yml", fixture))
+	})
 
 	return nil
 }

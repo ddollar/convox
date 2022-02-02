@@ -165,7 +165,7 @@ resource "kubernetes_service" "registry" {
     }
   }
 }
-resource "kubernetes_ingress" "registry" {
+resource "kubernetes_ingress_v1" "registry" {
   wait_for_load_balancer = true
 
   metadata {
