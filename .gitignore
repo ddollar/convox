@@ -1,6 +1,6 @@
+*.log
 .env
 .terraform
 coverage.txt
 terraform.tfvars
 terraform/platform/convox.platform
-.DS_Store
